@@ -1,0 +1,37 @@
+version: "3.6"
+
+services:
+  db:
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: todo
+    image: postgres:latest
+    networks:
+      - todo
+    ports:
+      - 5429:5432
+    restart: always
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    user: dev
+    depends_on:
+      - db
+    environment:
+      STAGE: dev
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://dev:dev@db/todo
+      SQLALCHEMY_TRACK_MODIFICATIONS: 0
+      FLASK_DEBUG: $FLASK_DEBUG
+      FLASK_ENV: $FLASK_ENV
+      JWT_SECRET_KEY: $JWT_SECRET_KEY
+    networks:
+      - todo
+    ports:
+      - 5000:5000
+    restart: always
+
+networks:
+  todo:

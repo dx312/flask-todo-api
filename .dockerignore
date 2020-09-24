@@ -1,0 +1,12 @@
+# ignore everything
+**
+
+# allowed files and directories
+!.env
+!manage.py
+!Pipfile
+!src
+!cmds
+
+# Ignore unnecessary files inside allowed directories
+**/__pycache__
